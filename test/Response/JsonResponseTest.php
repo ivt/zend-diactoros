@@ -113,7 +113,10 @@ class JsonResponseTest extends TestCase
      */
     public function testUsesSaneDefaultJsonEncodingFlags($value, $key)
     {
-        $defaultFlags = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES;
+        $defaultFlags = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP;
+        if (defined('JSON_UNESCAPED_SLASHES')) {
+            $defaultFlags |= JSON_UNESCAPED_SLASHES;
+        }
 
         $response = new JsonResponse(array($key => $value));
         $stream   = $response->getBody();
