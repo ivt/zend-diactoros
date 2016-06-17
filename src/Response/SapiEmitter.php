@@ -14,8 +14,6 @@ use RuntimeException;
 
 class SapiEmitter implements EmitterInterface
 {
-    use SapiEmitterTrait;
-
     /**
      * Emits a response for a PHP SAPI environment.
      *
@@ -31,11 +29,11 @@ class SapiEmitter implements EmitterInterface
             throw new RuntimeException('Unable to emit response; headers already sent');
         }
 
-        $response = $this->injectContentLength($response);
+        $response = SapiEmitterTrait::injectContentLength($response);
 
-        $this->emitStatusLine($response);
-        $this->emitHeaders($response);
-        $this->flush($maxBufferLevel);
+        SapiEmitterTrait::emitStatusLine($response);
+        SapiEmitterTrait::emitHeaders($response);
+        SapiEmitterTrait::flush($maxBufferLevel);
         $this->emitBody($response);
     }
 

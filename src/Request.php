@@ -19,10 +19,8 @@ use Psr\Http\Message\StreamInterface;
  * implemented such that they retain the internal state of the current
  * message and return a new instance that contains the changed state.
  */
-class Request implements RequestInterface
+class Request extends RequestTrait implements RequestInterface
 {
-    use MessageTrait, RequestTrait;
-
     /**
      * @param null|string $uri URI for the request, if any.
      * @param null|string $method HTTP method for the request, if any.

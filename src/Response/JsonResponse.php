@@ -22,8 +22,6 @@ use Zend\Diactoros\Stream;
  */
 class JsonResponse extends Response
 {
-    use InjectContentTypeTrait;
-
     /**
      * Default flags for json_encode; value of:
      *
@@ -63,7 +61,7 @@ class JsonResponse extends Response
         $body->write($this->jsonEncode($data, $encodingOptions));
         $body->rewind();
 
-        $headers = $this->injectContentType('application/json', $headers);
+        $headers = InjectContentTypeTrait::injectContentType('application/json', $headers);
 
         parent::__construct($body, $status, $headers);
     }

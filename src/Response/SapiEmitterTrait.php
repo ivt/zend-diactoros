@@ -11,7 +11,7 @@ namespace Zend\Diactoros\Response;
 
 use Psr\Http\Message\ResponseInterface;
 
-trait SapiEmitterTrait
+abstract class SapiEmitterTrait
 {
     /**
      * Inject the Content-Length header if is not already present.
@@ -19,7 +19,7 @@ trait SapiEmitterTrait
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    private function injectContentLength(ResponseInterface $response)
+    public static function injectContentLength(ResponseInterface $response)
     {
         if (! $response->hasHeader('Content-Length')) {
             // PSR-7 indicates int OR null for the stream size; for null values,
@@ -40,7 +40,7 @@ trait SapiEmitterTrait
      *
      * @param ResponseInterface $response
      */
-    private function emitStatusLine(ResponseInterface $response)
+    public static function emitStatusLine(ResponseInterface $response)
     {
         $reasonPhrase = $response->getReasonPhrase();
         header(sprintf(
@@ -61,10 +61,10 @@ trait SapiEmitterTrait
      *
      * @param ResponseInterface $response
      */
-    private function emitHeaders(ResponseInterface $response)
+    public static function emitHeaders(ResponseInterface $response)
     {
         foreach ($response->getHeaders() as $header => $values) {
-            $name  = $this->filterHeader($header);
+            $name  = self::filterHeader($header);
             $first = true;
             foreach ($values as $value) {
                 header(sprintf(
@@ -83,7 +83,7 @@ trait SapiEmitterTrait
      *
      * @param int|null $maxBufferLevel Flush up to this buffer level.
      */
-    private function flush($maxBufferLevel = null)
+    public static function flush($maxBufferLevel = null)
     {
         if (null === $maxBufferLevel) {
             $maxBufferLevel = ob_get_level();
@@ -100,7 +100,7 @@ trait SapiEmitterTrait
      * @param string $header
      * @return string
      */
-    private function filterHeader($header)
+    private static function filterHeader($header)
     {
         $filtered = str_replace('-', ' ', $header);
         $filtered = ucwords($filtered);

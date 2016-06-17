@@ -17,7 +17,7 @@ use Psr\Http\Message\StreamInterface;
  *
  * @see https://github.com/php-fig/http-message/tree/master/src/MessageInterface.php
  */
-trait MessageTrait
+abstract class MessageTrait
 {
     /**
      * List of all registered headers, as key => array of values.
@@ -36,12 +36,12 @@ trait MessageTrait
     /**
      * @var string
      */
-    private $protocol = '1.1';
+    protected $protocol = '1.1';
 
     /**
      * @var StreamInterface
      */
-    private $stream;
+    protected $stream;
 
     /**
      * Retrieves the HTTP protocol version as a string.
@@ -314,7 +314,7 @@ trait MessageTrait
         return $new;
     }
 
-    private function getStream($stream, $modeIfNotInstance)
+    protected function getStream($stream, $modeIfNotInstance)
     {
         if ($stream instanceof StreamInterface) {
             return $stream;
@@ -350,7 +350,7 @@ trait MessageTrait
      * @param array $originalHeaders Headers to filter.
      * @return array Filtered headers and names.
      */
-    private function filterHeaders(array $originalHeaders)
+    protected function filterHeaders(array $originalHeaders)
     {
         $headerNames = $headers = array();
         foreach ($originalHeaders as $header => $value) {

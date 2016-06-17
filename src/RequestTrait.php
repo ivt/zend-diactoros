@@ -28,12 +28,12 @@ use Psr\Http\Message\UriInterface;
  * @property StreamInterface $stream
  * @method bool hasHeader(string $header)
  */
-trait RequestTrait
+abstract class RequestTrait extends MessageTrait
 {
     /**
      * @var string
      */
-    private $method = '';
+    protected $method = '';
 
     /**
      * The request-target, if it has been provided or calculated.
@@ -45,7 +45,7 @@ trait RequestTrait
     /**
      * @var null|UriInterface
      */
-    private $uri;
+    protected $uri;
 
     /**
      * Initialize request state.
@@ -58,7 +58,7 @@ trait RequestTrait
      * @param array $headers Headers for the message, if any.
      * @throws InvalidArgumentException for any invalid value.
      */
-    private function initialize($uri = null, $method = null, $body = 'php://memory', array $headers = array())
+    protected function initialize($uri = null, $method = null, $body = 'php://memory', array $headers = array())
     {
         $this->validateMethod($method);
 
@@ -284,7 +284,7 @@ trait RequestTrait
      * @param null|string $method
      * @throws InvalidArgumentException on invalid HTTP method.
      */
-    private function validateMethod($method)
+    protected function validateMethod($method)
     {
         if (null === $method) {
             return;
@@ -310,7 +310,7 @@ trait RequestTrait
      *
      * @return string
      */
-    private function getHostFromUri()
+    protected function getHostFromUri()
     {
         $host  = $this->uri->getHost();
         $host .= $this->uri->getPort() ? ':' . $this->uri->getPort() : '';

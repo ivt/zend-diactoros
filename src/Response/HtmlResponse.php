@@ -23,8 +23,6 @@ use Zend\Diactoros\Stream;
  */
 class HtmlResponse extends Response
 {
-    use InjectContentTypeTrait;
-
     /**
      * Create an HTML response.
      *
@@ -41,7 +39,7 @@ class HtmlResponse extends Response
         parent::__construct(
             $this->createBody($html),
             $status,
-            $this->injectContentType('text/html; charset=utf-8', $headers)
+            InjectContentTypeTrait::injectContentType('text/html; charset=utf-8', $headers)
         );
     }
 

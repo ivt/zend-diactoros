@@ -23,8 +23,6 @@ use Zend\Diactoros\Stream;
  */
 class TextResponse extends Response
 {
-    use InjectContentTypeTrait;
-
     /**
      * Create a plain text response.
      *
@@ -41,7 +39,7 @@ class TextResponse extends Response
         parent::__construct(
             $this->createBody($text),
             $status,
-            $this->injectContentType('text/plain; charset=utf-8', $headers)
+            InjectContentTypeTrait::injectContentType('text/plain; charset=utf-8', $headers)
         );
     }
 

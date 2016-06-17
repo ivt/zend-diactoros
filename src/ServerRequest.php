@@ -28,10 +28,8 @@ use Psr\Http\Message\UploadedFileInterface;
  * implemented such that they retain the internal state of the current
  * message and return a new instance that contains the changed state.
  */
-class ServerRequest implements ServerRequestInterface
+class ServerRequest extends RequestTrait implements ServerRequestInterface
 {
-    use MessageTrait, RequestTrait;
-
     /**
      * @var array
      */
