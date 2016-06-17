@@ -215,6 +215,10 @@ class CallbackStreamTest extends TestCase
      */
     public function testAllowsArbitraryPhpCallbacks($callback, $expected)
     {
+        if (version_compare(PHP_VERSION, '5.4', 'lt')) {
+            $this->markTestSkipped('Skipped as PHP versions prior to 5.4 do not support arrays as callables');
+        }
+
         $stream = new CallbackStream($callback);
         $contents = $stream->getContents();
         $this->assertEquals($expected, $contents);
