@@ -56,7 +56,7 @@ class JsonResponse extends Response
     public function __construct(
         $data,
         $status = 200,
-        array $headers = [],
+        array $headers = array(),
         $encodingOptions = self::DEFAULT_JSON_FLAGS
     ) {
         $body = new Stream('php://temp', 'wb+');

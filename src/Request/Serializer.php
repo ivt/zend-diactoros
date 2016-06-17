@@ -123,7 +123,7 @@ final class Serializer extends AbstractSerializer
             throw new UnexpectedValueException('Invalid request line detected');
         }
 
-        return [$matches['method'], $matches['target'], $matches['version']];
+        return array($matches['method'], $matches['target'], $matches['version']);
     }
 
     /**

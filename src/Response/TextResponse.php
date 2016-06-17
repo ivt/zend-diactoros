@@ -36,7 +36,7 @@ class TextResponse extends Response
      * @param array $headers Array of headers to use at initialization.
      * @throws InvalidArgumentException if $text is neither a string or stream.
      */
-    public function __construct($text, $status = 200, array $headers = [])
+    public function __construct($text, $status = 200, array $headers = array())
     {
         parent::__construct(
             $this->createBody($text),

@@ -35,12 +35,12 @@ class ServerRequest implements ServerRequestInterface
     /**
      * @var array
      */
-    private $attributes = [];
+    private $attributes = array();
 
     /**
      * @var array
      */
-    private $cookieParams = [];
+    private $cookieParams = array();
 
     /**
      * @var null|array|object
@@ -50,7 +50,7 @@ class ServerRequest implements ServerRequestInterface
     /**
      * @var array
      */
-    private $queryParams = [];
+    private $queryParams = array();
 
     /**
      * @var array
@@ -76,14 +76,14 @@ class ServerRequest implements ServerRequestInterface
      * @throws InvalidArgumentException for any invalid value.
      */
     public function __construct(
-        array $serverParams = [],
-        array $uploadedFiles = [],
+        array $serverParams = array(),
+        array $uploadedFiles = array(),
         $uri = null,
         $method = null,
         $body = 'php://input',
-        array $headers = [],
-        array $cookies = [],
-        array $queryParams = [],
+        array $headers = array(),
+        array $cookies = array(),
+        array $queryParams = array(),
         $parsedBody = null,
         $protocol = '1.1'
     ) {

@@ -85,15 +85,15 @@ class SerializerTest extends TestCase
 
         $this->assertTrue($response->hasHeader('X-Foo-Bar'));
         $values = $response->getHeader('X-Foo-Bar');
-        $this->assertEquals(['Baz', 'Bat'], $values);
+        $this->assertEquals(array('Baz', 'Bat'), $values);
     }
 
     public function headersWithContinuationLines()
     {
-        return [
-            'space' => ["HTTP/1.0 200 A-OK\r\nContent-Type: text/plain\r\nX-Foo-Bar: Baz;\r\n Bat\r\n\r\nContent!"],
-            'tab' => ["HTTP/1.0 200 A-OK\r\nContent-Type: text/plain\r\nX-Foo-Bar: Baz;\r\n\tBat\r\n\r\nContent!"],
-        ];
+        return array(
+            'space' => array("HTTP/1.0 200 A-OK\r\nContent-Type: text/plain\r\nX-Foo-Bar: Baz;\r\n Bat\r\n\r\nContent!"),
+            'tab' => array("HTTP/1.0 200 A-OK\r\nContent-Type: text/plain\r\nX-Foo-Bar: Baz;\r\n\tBat\r\n\r\nContent!"),
+        );
     }
 
     /**
@@ -160,20 +160,20 @@ class SerializerTest extends TestCase
 
     public function messagesWithInvalidHeaders()
     {
-        return [
-            'invalid-name' => [
+        return array(
+            'invalid-name' => array(
                 "HTTP/1.1 204\r\nThi;-I()-Invalid: value",
                 'Invalid header detected'
-            ],
-            'invalid-format' => [
+            ),
+            'invalid-format' => array(
                 "HTTP/1.1 204\r\nThis is not a header\r\n\r\nContent",
                 'Invalid header detected'
-            ],
-            'invalid-continuation' => [
+            ),
+            'invalid-continuation' => array(
                 "HTTP/1.1 204\r\nX-Foo-Bar: Baz\r\nInvalid continuation\r\nContent",
                 'Invalid header continuation'
-            ],
-        ];
+            ),
+        );
     }
 
     /**

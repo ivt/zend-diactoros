@@ -107,12 +107,12 @@ class UriTest extends TestCase
 
     public function validPorts()
     {
-        return [
-            'null'         => [ null ],
-            'int'          => [ 3000 ],
-            'string'       => [ "3000" ],
-            'sameasbefore' => [ "3001" ],
-        ];
+        return array(
+            'null'         => array( null ),
+            'int'          => array( 3000 ),
+            'string'       => array( "3000" ),
+            'sameasbefore' => array( "3001" ),
+        );
     }
 
     /**
@@ -132,16 +132,16 @@ class UriTest extends TestCase
 
     public function invalidPorts()
     {
-        return [
-            'true'      => [ true ],
-            'false'     => [ false ],
-            'string'    => [ 'string' ],
-            'array'     => [ [ 3000 ] ],
-            'object'    => [ (object) [ 3000 ] ],
-            'zero'      => [ 0 ],
-            'too-small' => [ -1 ],
-            'too-big'   => [ 65536 ],
-        ];
+        return array(
+            'true'      => array( true ),
+            'false'     => array( false ),
+            'string'    => array( 'string' ),
+            'array'     => array( array( 3000 ) ),
+            'object'    => array( (object) array( 3000 ) ),
+            'zero'      => array( 0 ),
+            'too-small' => array( -1 ),
+            'too-big'   => array( 65536 ),
+        );
     }
 
     /**
@@ -174,15 +174,15 @@ class UriTest extends TestCase
 
     public function invalidPaths()
     {
-        return [
-            'null'      => [ null ],
-            'true'      => [ true ],
-            'false'     => [ false ],
-            'array'     => [ [ '/bar/baz' ] ],
-            'object'    => [ (object) [ '/bar/baz' ] ],
-            'query'     => [ '/bar/baz?bat=quz' ],
-            'fragment'  => [ '/bar/baz#bat' ],
-        ];
+        return array(
+            'null'      => array( null ),
+            'true'      => array( true ),
+            'false'     => array( false ),
+            'array'     => array( array( '/bar/baz' ) ),
+            'object'    => array( (object) array( '/bar/baz' ) ),
+            'query'     => array( '/bar/baz?bat=quz' ),
+            'fragment'  => array( '/bar/baz#bat' ),
+        );
     }
 
     /**
@@ -206,14 +206,14 @@ class UriTest extends TestCase
 
     public function invalidQueryStrings()
     {
-        return [
-            'null'      => [ null ],
-            'true'      => [ true ],
-            'false'     => [ false ],
-            'array'     => [ [ 'baz=bat' ] ],
-            'object'    => [ (object) [ 'baz=bat' ] ],
-            'fragment'  => [ 'baz=bat#quz' ],
-        ];
+        return array(
+            'null'      => array( null ),
+            'true'      => array( true ),
+            'false'     => array( false ),
+            'array'     => array( array( 'baz=bat' ) ),
+            'object'    => array( (object) array( 'baz=bat' ) ),
+            'fragment'  => array( 'baz=bat#quz' ),
+        );
     }
 
     /**
@@ -246,12 +246,12 @@ class UriTest extends TestCase
 
     public function authorityInfo()
     {
-        return [
-            'host-only'      => [ 'http://foo.com/bar',         'foo.com' ],
-            'host-port'      => [ 'http://foo.com:3000/bar',    'foo.com:3000' ],
-            'user-host'      => [ 'http://me@foo.com/bar',      'me@foo.com' ],
-            'user-host-port' => [ 'http://me@foo.com:3000/bar', 'me@foo.com:3000' ],
-        ];
+        return array(
+            'host-only'      => array( 'http://foo.com/bar',         'foo.com' ),
+            'host-port'      => array( 'http://foo.com:3000/bar',    'foo.com:3000' ),
+            'user-host'      => array( 'http://me@foo.com/bar',      'me@foo.com' ),
+            'user-host-port' => array( 'http://me@foo.com:3000/bar', 'me@foo.com:3000' ),
+        );
     }
 
     /**
@@ -297,15 +297,15 @@ class UriTest extends TestCase
 
     public function invalidConstructorUris()
     {
-        return [
-            'null' => [ null ],
-            'true' => [ true ],
-            'false' => [ false ],
-            'int' => [ 1 ],
-            'float' => [ 1.1 ],
-            'array' => [ [ 'http://example.com/' ] ],
-            'object' => [ (object) [ 'uri' => 'http://example.com/' ] ],
-        ];
+        return array(
+            'null' => array( null ),
+            'true' => array( true ),
+            'false' => array( false ),
+            'int' => array( 1 ),
+            'float' => array( 1.1 ),
+            'array' => array( array( 'http://example.com/' ) ),
+            'object' => array( (object) array( 'uri' => 'http://example.com/' ) ),
+        );
     }
 
     /**
@@ -339,13 +339,13 @@ class UriTest extends TestCase
 
     public function invalidSchemes()
     {
-        return [
-            'mailto' => [ 'mailto' ],
-            'ftp'    => [ 'ftp' ],
-            'telnet' => [ 'telnet' ],
-            'ssh'    => [ 'ssh' ],
-            'git'    => [ 'git' ],
-        ];
+        return array(
+            'mailto' => array( 'mailto' ),
+            'ftp'    => array( 'ftp' ),
+            'telnet' => array( 'telnet' ),
+            'ssh'    => array( 'ssh' ),
+            'git'    => array( 'git' ),
+        );
     }
 
     /**
@@ -397,10 +397,10 @@ class UriTest extends TestCase
 
     public function standardSchemePortCombinations()
     {
-        return [
-            'http'  => [ 'http', 80 ],
-            'https' => [ 'https', 443 ],
-        ];
+        return array(
+            'http'  => array( 'http', 80 ),
+            'https' => array( 'https', 443 ),
+        );
     }
 
     /**
@@ -417,15 +417,15 @@ class UriTest extends TestCase
 
     public function mutations()
     {
-        return [
-            'scheme'    => ['withScheme', 'https'],
-            'user-info' => ['withUserInfo', 'foo'],
-            'host'      => ['withHost', 'www.example.com'],
-            'port'      => ['withPort', 8080],
-            'path'      => ['withPath', '/changed'],
-            'query'     => ['withQuery', 'changed=value'],
-            'fragment'  => ['withFragment', 'changed'],
-        ];
+        return array(
+            'scheme'    => array('withScheme', 'https'),
+            'user-info' => array('withUserInfo', 'foo'),
+            'host'      => array('withHost', 'www.example.com'),
+            'port'      => array('withPort', 8080),
+            'path'      => array('withPath', '/changed'),
+            'query'     => array('withQuery', 'changed=value'),
+            'fragment'  => array('withFragment', 'changed'),
+        );
     }
 
     /**
@@ -461,13 +461,13 @@ class UriTest extends TestCase
 
     public function queryStringsForEncoding()
     {
-        return [
-            'key-only' => ['k^ey', 'k%5Eey'],
-            'key-value' => ['k^ey=valu`', 'k%5Eey=valu%60'],
-            'array-key-only' => ['key[]', 'key%5B%5D'],
-            'array-key-value' => ['key[]=valu`', 'key%5B%5D=valu%60'],
-            'complex' => ['k^ey&key[]=valu`&f<>=`bar', 'k%5Eey&key%5B%5D=valu%60&f%3C%3E=%60bar'],
-        ];
+        return array(
+            'key-only' => array('k^ey', 'k%5Eey'),
+            'key-value' => array('k^ey=valu`', 'k%5Eey=valu%60'),
+            'array-key-only' => array('key[]', 'key%5B%5D'),
+            'array-key-value' => array('key[]=valu`', 'key%5B%5D=valu%60'),
+            'complex' => array('k^ey&key[]=valu`&f<>=`bar', 'k%5Eey&key%5B%5D=valu%60&f%3C%3E=%60bar'),
+        );
     }
 
     /**
@@ -519,16 +519,16 @@ class UriTest extends TestCase
 
     public function invalidStringComponentValues()
     {
-        $methods = [
+        $methods = array(
             'withScheme',
             'withUserInfo',
             'withHost',
             'withPath',
             'withQuery',
             'withFragment',
-        ];
+        );
 
-        $values = [
+        $values = array(
             'null'       => null,
             'true'       => true,
             'false'      => false,
@@ -536,15 +536,15 @@ class UriTest extends TestCase
             'int'        => 1,
             'zero-float' => 0.0,
             'float'      => 1.1,
-            'array'      => ['value'],
-            'object'     => (object)['value' => 'value'],
-        ];
+            'array'      => array('value'),
+            'object'     => (object)array('value' => 'value'),
+        );
 
-        $combinations = [];
+        $combinations = array();
         foreach ($methods as $method) {
             foreach ($values as $type => $value) {
                 $key = sprintf('%s-%s', $method, $type);
-                $combinations[$key] = [$method, $value];
+                $combinations[$key] = array($method, $value);
             }
         }
 

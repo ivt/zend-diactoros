@@ -29,7 +29,7 @@ class Response implements ResponseInterface
      *
      * @var array
      */
-    private $phrases = [
+    private $phrases = array(
         // INFORMATIONAL CODES
         100 => 'Continue',
         101 => 'Switching Protocols',
@@ -93,7 +93,7 @@ class Response implements ResponseInterface
         507 => 'Insufficient Storage',
         508 => 'Loop Detected',
         511 => 'Network Authentication Required',
-    ];
+    );
 
     /**
      * @var string
@@ -111,7 +111,7 @@ class Response implements ResponseInterface
      * @param array $headers Headers for the response, if any.
      * @throws InvalidArgumentException on any invalid element.
      */
-    public function __construct($body = 'php://memory', $status = 200, array $headers = [])
+    public function __construct($body = 'php://memory', $status = 200, array $headers = array())
     {
         $this->setStatusCode($status);
         $this->stream = $this->getStream($body, 'wb+');

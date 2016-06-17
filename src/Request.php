@@ -30,7 +30,7 @@ class Request implements RequestInterface
      * @param array $headers Headers for the message, if any.
      * @throws \InvalidArgumentException for any invalid value.
      */
-    public function __construct($uri = null, $method = null, $body = 'php://temp', array $headers = [])
+    public function __construct($uri = null, $method = null, $body = 'php://temp', array $headers = array())
     {
         $this->initialize($uri, $method, $body, $headers);
     }
@@ -44,7 +44,7 @@ class Request implements RequestInterface
         if (! $this->hasHeader('host')
             && ($this->uri && $this->uri->getHost())
         ) {
-            $headers['Host'] = [$this->getHostFromUri()];
+            $headers['Host'] = array($this->getHostFromUri());
         }
 
         return $headers;
@@ -59,15 +59,15 @@ class Request implements RequestInterface
             if (strtolower($header) === 'host'
                 && ($this->uri && $this->uri->getHost())
             ) {
-                return [$this->getHostFromUri()];
+                return array($this->getHostFromUri());
             }
 
-            return [];
+            return array();
         }
 
         $header = $this->headerNames[strtolower($header)];
         $value  = $this->headers[$header];
-        $value  = is_array($value) ? $value : [$value];
+        $value  = is_array($value) ? $value : array($value);
 
         return $value;
     }

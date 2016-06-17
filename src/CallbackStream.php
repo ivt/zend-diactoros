@@ -162,11 +162,11 @@ class CallbackStream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        $metadata = [
+        $metadata = array(
             'eof' => $this->eof(),
             'stream_type' => 'callback',
             'seekable' => false
-        ];
+        );
 
         if (null === $key) {
             return $metadata;

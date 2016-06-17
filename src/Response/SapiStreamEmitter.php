@@ -101,12 +101,12 @@ class SapiStreamEmitter implements EmitterInterface
     private function parseContentRange($header)
     {
         if (preg_match('/(?P<unit>[\w]+)\s+(?P<first>\d+)-(?P<last>\d+)\/(?P<length>\d+|\*)/', $header, $matches)) {
-            return [
+            return array(
                 $matches['unit'],
                 (int) $matches['first'],
                 (int) $matches['last'],
                 $matches['length'] === '*' ? '*' : (int) $matches['length'],
-            ];
+            );
         }
         return false;
     }

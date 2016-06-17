@@ -36,7 +36,7 @@ class HtmlResponse extends Response
      * @param array $headers Array of headers to use at initialization.
      * @throws InvalidArgumentException if $html is neither a string or stream.
      */
-    public function __construct($html, $status = 200, array $headers = [])
+    public function __construct($html, $status = 200, array $headers = array())
     {
         parent::__construct(
             $this->createBody($html),

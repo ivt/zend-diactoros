@@ -56,7 +56,7 @@ class RequestTest extends TestCase
     public function testConstructorRaisesExceptionForInvalidStream()
     {
         $this->setExpectedException('InvalidArgumentException');
-        new Request(['TOTALLY INVALID']);
+        new Request(array('TOTALLY INVALID'));
     }
 
     public function testWithUriReturnsNewInstanceWithNewUri()
@@ -73,9 +73,9 @@ class RequestTest extends TestCase
     {
         $uri     = new Uri('http://example.com/');
         $body    = new Stream('php://memory');
-        $headers = [
-            'x-foo' => ['bar'],
-        ];
+        $headers = array(
+            'x-foo' => array('bar'),
+        );
         $request = new Request(
             $uri,
             'POST',
@@ -103,14 +103,14 @@ class RequestTest extends TestCase
 
     public function invalidRequestUri()
     {
-        return [
-            'true'     => [ true ],
-            'false'    => [ false ],
-            'int'      => [ 1 ],
-            'float'    => [ 1.1 ],
-            'array'    => [ ['http://example.com'] ],
-            'stdClass' => [ (object) [ 'href'         => 'http://example.com'] ],
-        ];
+        return array(
+            'true'     => array( true ),
+            'false'    => array( false ),
+            'int'      => array( 1 ),
+            'float'    => array( 1.1 ),
+            'array'    => array( array('http://example.com') ),
+            'stdClass' => array( (object) array( 'href'         => 'http://example.com') ),
+        );
     }
 
     /**
@@ -124,15 +124,15 @@ class RequestTest extends TestCase
 
     public function invalidRequestMethod()
     {
-        return [
-            'true'       => [ true ],
-            'false'      => [ false ],
-            'int'        => [ 1 ],
-            'float'      => [ 1.1 ],
-            'bad-string' => [ 'BOGUS METHOD' ],
-            'array'      => [ ['POST'] ],
-            'stdClass'   => [ (object) [ 'method' => 'POST'] ],
-        ];
+        return array(
+            'true'       => array( true ),
+            'false'      => array( false ),
+            'int'        => array( 1 ),
+            'float'      => array( 1.1 ),
+            'bad-string' => array( 'BOGUS METHOD' ),
+            'array'      => array( array('POST') ),
+            'stdClass'   => array( (object) array( 'method' => 'POST') ),
+        );
     }
 
     /**
@@ -146,20 +146,20 @@ class RequestTest extends TestCase
 
     public function customRequestMethods()
     {
-        return[
+        return array(
             /* WebDAV methods */
-            'TRACE'     => ['TRACE'],
-            'PROPFIND'  => ['PROPFIND'],
-            'PROPPATCH' => ['PROPPATCH'],
-            'MKCOL'     => ['MKCOL'],
-            'COPY'      => ['COPY'],
-            'MOVE'      => ['MOVE'],
-            'LOCK'      => ['LOCK'],
-            'UNLOCK'    => ['UNLOCK'],
-            'UNLOCK'    => ['UNLOCK'],
+            'TRACE'     => array('TRACE'),
+            'PROPFIND'  => array('PROPFIND'),
+            'PROPPATCH' => array('PROPPATCH'),
+            'MKCOL'     => array('MKCOL'),
+            'COPY'      => array('COPY'),
+            'MOVE'      => array('MOVE'),
+            'LOCK'      => array('LOCK'),
+            'UNLOCK'    => array('UNLOCK'),
+            'UNLOCK'    => array('UNLOCK'),
             /* Arbitrary methods */
-            '#!ALPHA-1234&%' => ['#!ALPHA-1234&%'],
-        ];
+            '#!ALPHA-1234&%' => array('#!ALPHA-1234&%'),
+        );
     }
 
     /**
@@ -174,14 +174,14 @@ class RequestTest extends TestCase
 
     public function invalidRequestBody()
     {
-        return [
-            'true'       => [ true ],
-            'false'      => [ false ],
-            'int'        => [ 1 ],
-            'float'      => [ 1.1 ],
-            'array'      => [ ['BODY'] ],
-            'stdClass'   => [ (object) [ 'body' => 'BODY'] ],
-        ];
+        return array(
+            'true'       => array( true ),
+            'false'      => array( false ),
+            'int'        => array( 1 ),
+            'float'      => array( 1.1 ),
+            'array'      => array( array('BODY') ),
+            'stdClass'   => array( (object) array( 'body' => 'BODY') ),
+        );
     }
 
     /**
@@ -195,13 +195,13 @@ class RequestTest extends TestCase
 
     public function invalidHeaderTypes()
     {
-        return [
-            'indexed-array' => [[['INVALID']], 'header name'],
-            'null' => [['x-invalid-null' => null]],
-            'true' => [['x-invalid-true' => true]],
-            'false' => [['x-invalid-false' => false]],
-            'object' => [['x-invalid-object' => (object) ['INVALID']]],
-        ];
+        return array(
+            'indexed-array' => array(array(array('INVALID')), 'header name'),
+            'null' => array(array('x-invalid-null' => null)),
+            'true' => array(array('x-invalid-true' => true)),
+            'false' => array(array('x-invalid-false' => false)),
+            'object' => array(array('x-invalid-object' => (object) array('INVALID'))),
+        );
     }
 
     /**
@@ -229,32 +229,32 @@ class RequestTest extends TestCase
 
     public function requestsWithUri()
     {
-        return [
-            'absolute-uri' => [
+        return array(
+            'absolute-uri' => array(
                 (new Request())
                 ->withUri(new Uri('https://api.example.com/user'))
                 ->withMethod('POST'),
                 '/user'
-            ],
-            'absolute-uri-with-query' => [
+            ),
+            'absolute-uri-with-query' => array(
                 (new Request())
                 ->withUri(new Uri('https://api.example.com/user?foo=bar'))
                 ->withMethod('POST'),
                 '/user?foo=bar'
-            ],
-            'relative-uri' => [
+            ),
+            'relative-uri' => array(
                 (new Request())
                 ->withUri(new Uri('/user'))
                 ->withMethod('GET'),
                 '/user'
-            ],
-            'relative-uri-with-query' => [
+            ),
+            'relative-uri-with-query' => array(
                 (new Request())
                 ->withUri(new Uri('/user?foo=bar'))
                 ->withMethod('GET'),
                 '/user?foo=bar'
-            ],
-        ];
+            ),
+        );
     }
 
     /**
@@ -267,14 +267,14 @@ class RequestTest extends TestCase
 
     public function validRequestTargets()
     {
-        return [
-            'asterisk-form'         => [ '*' ],
-            'authority-form'        => [ 'api.example.com' ],
-            'absolute-form'         => [ 'https://api.example.com/users' ],
-            'absolute-form-query'   => [ 'https://api.example.com/users?foo=bar' ],
-            'origin-form-path-only' => [ '/users' ],
-            'origin-form'           => [ '/users?id=foo' ],
-        ];
+        return array(
+            'asterisk-form'         => array( '*' ),
+            'authority-form'        => array( 'api.example.com' ),
+            'absolute-form'         => array( 'https://api.example.com/users' ),
+            'absolute-form-query'   => array( 'https://api.example.com/users?foo=bar' ),
+            'origin-form-path-only' => array( '/users' ),
+            'origin-form'           => array( '/users?id=foo' ),
+        );
     }
 
     /**
@@ -346,7 +346,7 @@ class RequestTest extends TestCase
     {
         $request = new Request('http://example.com');
         $header = $request->getHeader('host');
-        $this->assertEquals(['example.com'], $header);
+        $this->assertEquals(array('example.com'), $header);
     }
 
     /**
@@ -355,7 +355,7 @@ class RequestTest extends TestCase
     public function testGetHostHeaderReturnsEmptyArrayIfNoUriPresent()
     {
         $request = new Request();
-        $this->assertSame([], $request->getHeader('host'));
+        $this->assertSame(array(), $request->getHeader('host'));
     }
 
     /**
@@ -364,7 +364,7 @@ class RequestTest extends TestCase
     public function testGetHostHeaderReturnsEmptyArrayIfUriDoesNotContainHost()
     {
         $request = new Request(new Uri());
-        $this->assertSame([], $request->getHeader('host'));
+        $this->assertSame(array(), $request->getHeader('host'));
     }
 
     /**
@@ -432,20 +432,20 @@ class RequestTest extends TestCase
 
     public function headersWithInjectionVectors()
     {
-        return [
-            'name-with-cr'           => ["X-Foo\r-Bar", 'value'],
-            'name-with-lf'           => ["X-Foo\n-Bar", 'value'],
-            'name-with-crlf'         => ["X-Foo\r\n-Bar", 'value'],
-            'name-with-2crlf'        => ["X-Foo\r\n\r\n-Bar", 'value'],
-            'value-with-cr'          => ['X-Foo-Bar', "value\rinjection"],
-            'value-with-lf'          => ['X-Foo-Bar', "value\ninjection"],
-            'value-with-crlf'        => ['X-Foo-Bar', "value\r\ninjection"],
-            'value-with-2crlf'       => ['X-Foo-Bar', "value\r\n\r\ninjection"],
-            'array-value-with-cr'    => ['X-Foo-Bar', ["value\rinjection"]],
-            'array-value-with-lf'    => ['X-Foo-Bar', ["value\ninjection"]],
-            'array-value-with-crlf'  => ['X-Foo-Bar', ["value\r\ninjection"]],
-            'array-value-with-2crlf' => ['X-Foo-Bar', ["value\r\n\r\ninjection"]],
-        ];
+        return array(
+            'name-with-cr'           => array("X-Foo\r-Bar", 'value'),
+            'name-with-lf'           => array("X-Foo\n-Bar", 'value'),
+            'name-with-crlf'         => array("X-Foo\r\n-Bar", 'value'),
+            'name-with-2crlf'        => array("X-Foo\r\n\r\n-Bar", 'value'),
+            'value-with-cr'          => array('X-Foo-Bar', "value\rinjection"),
+            'value-with-lf'          => array('X-Foo-Bar', "value\ninjection"),
+            'value-with-crlf'        => array('X-Foo-Bar', "value\r\ninjection"),
+            'value-with-2crlf'       => array('X-Foo-Bar', "value\r\n\r\ninjection"),
+            'array-value-with-cr'    => array('X-Foo-Bar', array("value\rinjection")),
+            'array-value-with-lf'    => array('X-Foo-Bar', array("value\ninjection")),
+            'array-value-with-crlf'  => array('X-Foo-Bar', array("value\r\ninjection")),
+            'array-value-with-2crlf' => array('X-Foo-Bar', array("value\r\n\r\ninjection")),
+        );
     }
 
     /**
@@ -455,29 +455,29 @@ class RequestTest extends TestCase
     public function testConstructorRaisesExceptionForHeadersWithCRLFVectors($name, $value)
     {
         $this->setExpectedException('InvalidArgumentException');
-        $request = new Request(null, null, 'php://memory', [$name =>  $value]);
+        $request = new Request(null, null, 'php://memory', array($name =>  $value));
     }
 
     public function hostHeaderKeys()
     {
-        return [
-            'lowercase'            => ['host'],
-            'mixed-4'              => ['hosT'],
-            'mixed-3-4'            => ['hoST'],
-            'reverse-titlecase'    => ['hOST'],
-            'uppercase'            => ['HOST'],
-            'mixed-1-2-3'          => ['HOSt'],
-            'mixed-1-2'            => ['HOst'],
-            'titlecase'            => ['Host'],
-            'mixed-1-4'            => ['HosT'],
-            'mixed-1-2-4'          => ['HOsT'],
-            'mixed-1-3-4'          => ['HoST'],
-            'mixed-1-3'            => ['HoSt'],
-            'mixed-2-3'            => ['hOSt'],
-            'mixed-2-4'            => ['hOsT'],
-            'mixed-2'              => ['hOst'],
-            'mixed-3'              => ['hoSt'],
-        ];
+        return array(
+            'lowercase'            => array('host'),
+            'mixed-4'              => array('hosT'),
+            'mixed-3-4'            => array('hoST'),
+            'reverse-titlecase'    => array('hOST'),
+            'uppercase'            => array('HOST'),
+            'mixed-1-2-3'          => array('HOSt'),
+            'mixed-1-2'            => array('HOst'),
+            'titlecase'            => array('Host'),
+            'mixed-1-4'            => array('HosT'),
+            'mixed-1-2-4'          => array('HOsT'),
+            'mixed-1-3-4'          => array('HoST'),
+            'mixed-1-3'            => array('HoSt'),
+            'mixed-2-3'            => array('hOSt'),
+            'mixed-2-4'            => array('hOsT'),
+            'mixed-2'              => array('hOst'),
+            'mixed-3'              => array('hoSt'),
+        );
     }
 
     /**

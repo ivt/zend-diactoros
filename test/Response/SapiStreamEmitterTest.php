@@ -46,10 +46,10 @@ class SapiStreamEmitterTest extends SapiEmitterTest
 
     public function contentRangeProvider()
     {
-        return [
-            ['bytes 0-2/*', 'Hello world', 'Hel'],
-            ['bytes 3-6/*', 'Hello world', 'lo w'],
-        ];
+        return array(
+            array('bytes 0-2/*', 'Hello world', 'Hel'),
+            array('bytes 3-6/*', 'Hello world', 'lo w'),
+        );
     }
 
     /**
