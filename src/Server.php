@@ -53,7 +53,7 @@ class Server
      * @param ResponseInterface $response
      */
     public function __construct(
-        callable $callback,
+        $callback,
         ServerRequestInterface $request,
         ResponseInterface $response
     ) {
@@ -108,7 +108,7 @@ class Server
      * @return static
      */
     public static function createServer(
-        callable $callback,
+        $callback,
         array $server,
         array $query,
         array $body,
@@ -134,7 +134,7 @@ class Server
      * @return static
      */
     public static function createServerFromRequest(
-        callable $callback,
+        $callback,
         ServerRequestInterface $request,
         ResponseInterface $response = null
     ) {
@@ -156,7 +156,7 @@ class Server
      *
      * @param null|callable $finalHandler
      */
-    public function listen(callable $finalHandler = null)
+    public function listen($finalHandler = null)
     {
         $callback = $this->callback;
 

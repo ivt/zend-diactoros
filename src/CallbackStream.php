@@ -27,7 +27,7 @@ class CallbackStream implements StreamInterface
      * @param callable $callback
      * @throws InvalidArgumentException
      */
-    public function __construct(callable $callback)
+    public function __construct($callback)
     {
         $this->attach($callback);
     }
@@ -64,7 +64,7 @@ class CallbackStream implements StreamInterface
      * @param callable $callback
      * @throws InvalidArgumentException for callable callback
      */
-    public function attach(callable $callback)
+    public function attach($callback)
     {
         $this->callback = $callback;
     }

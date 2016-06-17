@@ -288,7 +288,7 @@ class ServerTest extends TestCase
             $invoked = true;
         };
 
-        $callback = function ($req, $res, callable $final = null) use ($phpunit) {
+        $callback = function ($req, $res, $final = null) use ($phpunit) {
             if (! $final) {
                 $phpunit->fail('No final callable passed!');
             }
