@@ -52,7 +52,8 @@ final class Serializer extends AbstractSerializer
         list($version, $status, $reasonPhrase) = self::getStatusLine($stream);
         list($headers, $body)                  = self::splitStream($stream);
 
-        return (new Response($body, $status, $headers))
+        $response = new Response($body, $status, $headers);
+        return $response
             ->withProtocolVersion($version)
             ->withStatus((int) $status, $reasonPhrase);
     }

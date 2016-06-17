@@ -32,7 +32,8 @@ class SapiStreamEmitterTest extends SapiEmitterTest
         $stream->eof()->willReturn(true);
         $stream->rewind()->willReturn(true);
         $stream->getSize()->willReturn(null);
-        $response = (new Response())
+        $response = new Response();
+        $response = $response
             ->withStatus(200)
             ->withBody($stream->reveal());
 
@@ -57,7 +58,8 @@ class SapiStreamEmitterTest extends SapiEmitterTest
      */
     public function testContentRange($header, $body, $expected)
     {
-        $response = (new Response())
+        $response = new Response();
+        $response = $response
             ->withHeader('Content-Range', $header);
 
         $response->getBody()->write($body);

@@ -18,7 +18,8 @@ class SerializerTest extends TestCase
 {
     public function testSerializesBasicResponse()
     {
-        $response = (new Response())
+        $response = new Response();
+        $response = $response
             ->withStatus(200)
             ->withAddedHeader('Content-Type', 'text/plain')
             ->withAddedHeader('X-Foo-Bar', 'Baz');
@@ -33,7 +34,8 @@ class SerializerTest extends TestCase
 
     public function testSerializesMultipleHeadersCorrectly()
     {
-        $response = (new Response())
+        $response = new Response();
+        $response = $response
             ->withStatus(204)
             ->withAddedHeader('X-Foo-Bar', 'Baz')
             ->withAddedHeader('X-Foo-Bar', 'Bat');
@@ -45,7 +47,8 @@ class SerializerTest extends TestCase
 
     public function testOmitsReasonPhraseFromStatusLineIfEmpty()
     {
-        $response = (new Response())
+        $response = new Response();
+        $response = $response
             ->withStatus(299)
             ->withAddedHeader('X-Foo-Bar', 'Baz');
         $response->getBody()->write('Content!');

@@ -408,7 +408,8 @@ class UriTest extends TestCase
      */
     public function testAuthorityOmitsPortForStandardSchemePortCombinations($scheme, $port)
     {
-        $uri = (new Uri())
+        $uri = new Uri();
+        $uri = $uri
             ->withHost('example.com')
             ->withScheme($scheme)
             ->withPort($port);
@@ -447,14 +448,16 @@ class UriTest extends TestCase
      */
     public function testPathIsProperlyEncoded()
     {
-        $uri = (new Uri())->withPath('/foo^bar');
+        $uri = new Uri();
+        $uri = $uri->withPath('/foo^bar');
         $expected = '/foo%5Ebar';
         $this->assertEquals($expected, $uri->getPath());
     }
 
     public function testPathDoesNotBecomeDoubleEncoded()
     {
-        $uri = (new Uri())->withPath('/foo%5Ebar');
+        $uri = new Uri();
+        $uri = $uri->withPath('/foo%5Ebar');
         $expected = '/foo%5Ebar';
         $this->assertEquals($expected, $uri->getPath());
     }
@@ -476,7 +479,8 @@ class UriTest extends TestCase
      */
     public function testQueryIsProperlyEncoded($query, $expected)
     {
-        $uri = (new Uri())->withQuery($query);
+        $uri = new Uri();
+        $uri = $uri->withQuery($query);
         $this->assertEquals($expected, $uri->getQuery());
     }
 
@@ -486,7 +490,8 @@ class UriTest extends TestCase
      */
     public function testQueryIsNotDoubleEncoded($query, $expected)
     {
-        $uri = (new Uri())->withQuery($expected);
+        $uri = new Uri();
+        $uri = $uri->withQuery($expected);
         $this->assertEquals($expected, $uri->getQuery());
     }
 
@@ -495,7 +500,8 @@ class UriTest extends TestCase
      */
     public function testFragmentIsProperlyEncoded()
     {
-        $uri = (new Uri())->withFragment('/p^th?key^=`bar#b@z');
+        $uri = new Uri();
+        $uri = $uri->withFragment('/p^th?key^=`bar#b@z');
         $expected = '/p%5Eth?key%5E=%60bar%23b@z';
         $this->assertEquals($expected, $uri->getFragment());
     }
@@ -506,7 +512,8 @@ class UriTest extends TestCase
     public function testFragmentIsNotDoubleEncoded()
     {
         $expected = '/p%5Eth?key%5E=%60bar%23b@z';
-        $uri = (new Uri())->withFragment($expected);
+        $uri = new Uri();
+        $uri = $uri->withFragment($expected);
         $this->assertEquals($expected, $uri->getFragment());
     }
 

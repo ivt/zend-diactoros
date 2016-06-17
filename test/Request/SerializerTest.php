@@ -21,7 +21,8 @@ class SerializerTest extends TestCase
 {
     public function testSerializesBasicRequest()
     {
-        $request = (new Request())
+        $request = new Request();
+        $request = $request
             ->withMethod('GET')
             ->withUri(new Uri('http://example.com/foo/bar?baz=bat'))
             ->withAddedHeader('Accept', 'text/html');
@@ -39,7 +40,8 @@ class SerializerTest extends TestCase
         $stream = new Stream('php://memory', 'wb+');
         $stream->write($body);
 
-        $request = (new Request())
+        $request = new Request();
+        $request = $request
             ->withMethod('POST')
             ->withUri(new Uri('http://example.com/foo/bar'))
             ->withAddedHeader('Accept', 'application/json')
@@ -53,7 +55,8 @@ class SerializerTest extends TestCase
 
     public function testSerializesMultipleHeadersCorrectly()
     {
-        $request = (new Request())
+        $request = new Request();
+        $request = $request
             ->withMethod('GET')
             ->withUri(new Uri('http://example.com/foo/bar?baz=bat'))
             ->withAddedHeader('X-Foo-Bar', 'Baz')
@@ -333,7 +336,8 @@ class SerializerTest extends TestCase
      */
     public function testToStringRaisesExceptionOnEmptyMethod()
     {
-        $request = (new Request())
+        $request = new Request();
+        $request = $request
             ->withUri(new Uri('http://example.com/foo/bar?baz=bat'));
         $message = Serializer::toString($request);
     }
