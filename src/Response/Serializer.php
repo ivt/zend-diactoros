@@ -37,7 +37,7 @@ final class Serializer extends AbstractSerializer
      * Parse a response from a stream.
      *
      * @param StreamInterface $stream
-     * @return ResponseInterface
+     * @return Response
      * @throws InvalidArgumentException when the stream is not readable.
      * @throws UnexpectedValueException when errors occur parsing the message.
      */
@@ -74,9 +74,8 @@ final class Serializer extends AbstractSerializer
         if (! empty($headers)) {
             $headers = "\r\n" . $headers;
         }
-        if (! empty($body)) {
-            $headers .= "\r\n\r\n";
-        }
+
+        $headers .= "\r\n\r\n";
 
         return sprintf(
             $format,

@@ -81,6 +81,23 @@ class ServerRequestFactoryTest extends TestCase
         $this->assertEquals($expected, ServerRequestFactory::marshalHeaders($server));
     }
 
+    public function testMarshalsVariablesPrefixedByApacheFromServerArray()
+    {
+        // Non-prefixed versions will be preferred
+        $server = array(
+            'HTTP_X_FOO_BAR' => 'nonprefixed',
+            'REDIRECT_HTTP_AUTHORIZATION' => 'token',
+            'REDIRECT_HTTP_X_FOO_BAR' => 'prefixed',
+        );
+
+        $expected = array(
+            'authorization' => 'token',
+            'x-foo-bar' => 'nonprefixed',
+        );
+
+        $this->assertEquals($expected, ServerRequestFactory::marshalHeaders($server));
+    }
+
     public function testStripQueryStringReturnsUnchangedStringIfNoQueryStringDetected()
     {
         $path = '/foo/bar';
@@ -391,6 +408,70 @@ class ServerRequestFactoryTest extends TestCase
         $this->assertEquals($expectedFiles, $request->getUploadedFiles());
         $this->assertEmpty($request->getAttributes());
         $this->assertEquals('1.1', $request->getProtocolVersion());
+    }
+
+    public function testFromGlobalsUsesCookieHeaderInsteadOfCookieSuperGlobal()
+    {
+        $_COOKIE = array(
+            'foo_bar' => 'bat',
+        );
+        $_SERVER['HTTP_COOKIE'] = 'foo_bar=baz';
+
+        $request = ServerRequestFactory::fromGlobals();
+        $this->assertSame(array('foo_bar' => 'baz'), $request->getCookieParams());
+    }
+
+    public function testFromGlobalsUsesCookieSuperGlobalWhenCookieHeaderIsNotSet()
+    {
+        $_COOKIE = array(
+            'foo_bar' => 'bat',
+        );
+
+        $request = ServerRequestFactory::fromGlobals();
+        $this->assertSame(array('foo_bar' => 'bat'), $request->getCookieParams());
+    }
+
+    public function cookieHeaderValues()
+    {
+        return array(
+            'ows-without-fold' => array(
+                "\tfoo=bar ",
+                array('foo' => 'bar'),
+            ),
+            'url-encoded-value' => array(
+                'foo=bar%3B+',
+                array('foo' => 'bar; '),
+            ),
+            'double-quoted-value' => array(
+                'foo="bar"',
+                array('foo' => 'bar'),
+            ),
+            'multiple-pairs' => array(
+                'foo=bar; baz="bat"; bau=bai',
+                array('foo' => 'bar', 'baz' => 'bat', 'bau' => 'bai'),
+            ),
+            'same-name-pairs' => array(
+                'foo=bar; foo="bat"',
+                array('foo' => 'bat'),
+            ),
+            'period-in-name' => array(
+                'foo.bar=baz',
+                array('foo.bar' => 'baz'),
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider cookieHeaderValues
+     * @param string $cookieHeader
+     * @param array $expectedCookies
+     */
+    public function testCookieHeaderVariations($cookieHeader, array $expectedCookies)
+    {
+        $_SERVER['HTTP_COOKIE'] = $cookieHeader;
+
+        $request = ServerRequestFactory::fromGlobals();
+        $this->assertSame($expectedCookies, $request->getCookieParams());
     }
 
     public function testNormalizeServerUsesMixedCaseAuthorizationHeaderFromApacheWhenPresent()

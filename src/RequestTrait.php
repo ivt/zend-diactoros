@@ -22,11 +22,6 @@ use Psr\Http\Message\UriInterface;
  * the environment. As such, this trait exists to provide the common code
  * between both client-side and server-side requests, and each can then
  * use the headers functionality required by their implementations.
- *
- * @property array $headers
- * @property array $headerNames
- * @property StreamInterface $stream
- * @method bool hasHeader(string $header)
  */
 abstract class RequestTrait extends MessageTrait
 {
@@ -43,7 +38,7 @@ abstract class RequestTrait extends MessageTrait
     private $requestTarget;
 
     /**
-     * @var null|UriInterface
+     * @var UriInterface
      */
     protected $uri;
 
@@ -66,9 +61,14 @@ abstract class RequestTrait extends MessageTrait
         $this->uri    = $this->createUri($uri);
         $this->stream = $this->getStream($body, 'wb+');
 
-        list($this->headerNames, $headers) = $this->filterHeaders($headers);
-        $this->assertHeaders($headers);
-        $this->headers = $headers;
+        $this->setHeaders($headers);
+
+        // per PSR-7: attempt to set the Host header from a provided URI if no
+        // Host header is provided
+        if (! $this->hasHeader('Host') && $this->uri->getHost()) {
+            $this->headerNames['host'] = 'Host';
+            $this->headers['Host'] = array($this->getHostFromUri());
+        }
     }
 
     /**
@@ -123,10 +123,6 @@ abstract class RequestTrait extends MessageTrait
     {
         if (null !== $this->requestTarget) {
             return $this->requestTarget;
-        }
-
-        if (! $this->uri) {
-            return '/';
         }
 
         $target = $this->uri->getPath();
@@ -315,19 +311,5 @@ abstract class RequestTrait extends MessageTrait
         $host  = $this->uri->getHost();
         $host .= $this->uri->getPort() ? ':' . $this->uri->getPort() : '';
         return $host;
-    }
-
-    /**
-     * Ensure header names and values are valid.
-     *
-     * @param array $headers
-     * @throws InvalidArgumentException
-     */
-    private function assertHeaders(array $headers)
-    {
-        foreach ($headers as $name => $headerValues) {
-            HeaderSecurity::assertValidName($name);
-            array_walk($headerValues, __NAMESPACE__ . '\HeaderSecurity::assertValid');
-        }
     }
 }

@@ -12,7 +12,7 @@ For server-side applications, you will create a `ServerRequest` instance, and po
 
 A client will _send_ a request, and _return_ a response. As a developer, you will _create_ and
 _populate_ the request, and then _introspect_ the response.  Both requests and responses are
-immutable; if you make changes -- e.g., by calling setter methods -- you must capture the return
+immutable; if you make changes &mdash; e.g., by calling setter methods &mdash; you must capture the return
 value, as it is a new instance.
 
 ```php
@@ -87,6 +87,13 @@ $request = Zend\Diactoros\ServerRequestFactory::fromGlobals(
 );
 ```
 
+When no cookie array is supplied, `fromGlobals` will first try to parse the supplied `cookie` header
+before falling back to the `$_COOKIE` superglobal. This is done because PHP has some legacy handling
+for request parameters which were then registered as global variables. Due to this, cookies with a period
+in the name were renamed with underlines. By getting the cookies directly from the cookie header, you have
+access to the original cookies in the way you set them in your application and they are send by the user
+agent.
+
 ### Manipulating the response
 
 Use the response object to add headers and provide content for the response.  Writing to the body
@@ -140,7 +147,7 @@ $server = Zend\Diactoros\Server::createServer(
 );
 
 // Using the createServerFromRequest factory, and providing it a request:
-$server = Zend\Diactoros\Server::createServerfromRequest(
+$server = Zend\Diactoros\Server::createServerFromRequest(
   function ($request, $response, $done) {
       $response->getBody()->write("Hello world!");
   },

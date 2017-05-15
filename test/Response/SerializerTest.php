@@ -32,6 +32,20 @@ class SerializerTest extends TestCase
         );
     }
 
+    public function testSerializesResponseWithoutBodyCorrectly()
+    {
+        $response = new Response();
+        $response = $response
+            ->withStatus(200)
+            ->withAddedHeader('Content-Type', 'text/plain');
+
+        $message = Serializer::toString($response);
+        $this->assertEquals(
+            "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n",
+            $message
+        );
+    }
+
     public function testSerializesMultipleHeadersCorrectly()
     {
         $response = new Response();

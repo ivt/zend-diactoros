@@ -9,7 +9,6 @@
 
 namespace ZendTest\Diactoros;
 
-use InvalidArgumentException;
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Diactoros\Request;
 use Zend\Diactoros\Stream;
@@ -329,6 +328,18 @@ class RequestTest extends TestCase
     /**
      * @group 39
      */
+    public function testGetHeadersContainsHostHeaderIfUriWithHostIsDeleted()
+    {
+        $request = new Request('http://example.com');
+        $request = $request->withoutHeader('host');
+        $headers = $request->getHeaders();
+        $this->assertArrayHasKey('Host', $headers);
+        $this->assertContains('example.com', $headers['Host']);
+    }
+
+    /**
+     * @group 39
+     */
     public function testGetHeadersContainsNoHostHeaderIfNoUriPresent()
     {
         $request = new Request();
@@ -352,6 +363,17 @@ class RequestTest extends TestCase
     public function testGetHostHeaderReturnsUriHostWhenPresent()
     {
         $request = new Request('http://example.com');
+        $header = $request->getHeader('host');
+        $this->assertEquals(array('example.com'), $header);
+    }
+
+    /**
+     * @group 39
+     */
+    public function testGetHostHeaderReturnsUriHostWhenHostHeaderDeleted()
+    {
+        $request = new Request('http://example.com');
+        $request = $request->withoutHeader('host');
         $header = $request->getHeader('host');
         $this->assertEquals(array('example.com'), $header);
     }
@@ -400,6 +422,19 @@ class RequestTest extends TestCase
     {
         $request = new Request(new Uri());
         $this->assertEmpty($request->getHeaderLine('host'));
+    }
+
+    public function testHostHeaderSetFromUriOnCreationIfNoHostHeaderSpecified()
+    {
+        $request = new Request('http://www.example.com');
+        $this->assertTrue($request->hasHeader('Host'));
+        $this->assertEquals('www.example.com', $request->getHeaderLine('host'));
+    }
+
+    public function testHostHeaderNotSetFromUriOnCreationIfHostHeaderSpecified()
+    {
+        $request = new Request('http://www.example.com', null, 'php://memory', array('Host' => 'www.test.com'));
+        $this->assertEquals('www.test.com', $request->getHeaderLine('host'));
     }
 
     public function testPassingPreserveHostFlagWhenUpdatingUriDoesNotUpdateHostHeader()
@@ -467,7 +502,7 @@ class RequestTest extends TestCase
     public function testConstructorRaisesExceptionForHeadersWithCRLFVectors($name, $value)
     {
         $this->setExpectedException('InvalidArgumentException');
-        $request = new Request(null, null, 'php://memory', array($name =>  $value));
+        $request = new Request(null, null, 'php://memory', array($name => $value));
     }
 
     public function hostHeaderKeys()

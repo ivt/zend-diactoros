@@ -575,4 +575,55 @@ class UriTest extends TestCase
 
         $this->assertEquals('ουτοπία.δπθ.gr', $uri->getHost());
     }
+
+    /**
+     * @dataProvider utf8PathsDataProvider
+     */
+    public function testUtf8Path($url, $result)
+    {
+        $uri = new Uri($url);
+
+        $this->assertEquals($result, $uri->getPath());
+    }
+
+
+    public function utf8PathsDataProvider()
+    {
+        return array(
+            array('http://example.com/тестовый_путь/', '/тестовый_путь/'),
+            array('http://example.com/ουτοπία/', '/ουτοπία/')
+        );
+    }
+
+    /**
+     * @dataProvider utf8QueryStringsDataProvider
+     */
+    public function testUtf8Query($url, $result)
+    {
+        $uri = new Uri($url);
+
+        $this->assertEquals($result, $uri->getQuery());
+    }
+
+    public function utf8QueryStringsDataProvider()
+    {
+        return array(
+            array('http://example.com/?q=тестовый_путь', 'q=тестовый_путь'),
+            array('http://example.com/?q=ουτοπία', 'q=ουτοπία'),
+        );
+    }
+
+    public function testUriDoesNotAppendColonToHostIfPortIsEmpty()
+    {
+        $uri = new Uri();
+        $uri = $uri->withHost('google.com');
+        $this->assertEquals('//google.com', (string) $uri);
+    }
+
+    public function testAuthorityIsPrefixedByDoubleSlashIfPresent()
+    {
+        $uri = new Uri();
+        $uri = $uri->withHost('example.com');
+        $this->assertEquals('//example.com', (string) $uri);
+    }
 }

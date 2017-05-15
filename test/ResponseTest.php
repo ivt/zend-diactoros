@@ -9,6 +9,8 @@
 
 namespace ZendTest\Diactoros;
 
+use DOMDocument;
+use DOMXPath;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Diactoros\Response;
@@ -38,32 +40,67 @@ class ResponseTest extends TestCase
         $this->assertEquals(400, $response->getStatusCode());
     }
 
-    public function invalidStatusCodes()
-    {
-        return array(
-            'too-low' => array(99),
-            'too-high' => array(600),
-            'null' => array(null),
-            'bool' => array(true),
-            'string' => array('foo'),
-            'array' => array(array(200)),
-            'object' => array((object) array(200)),
-        );
-    }
-
-    /**
-     * @dataProvider invalidStatusCodes
-     */
-    public function testCannotSetInvalidStatusCode($code)
-    {
-        $this->setExpectedException('InvalidArgumentException');
-        $response = $this->response->withStatus($code);
-    }
-
     public function testReasonPhraseDefaultsToStandards()
     {
         $response = $this->response->withStatus(422);
         $this->assertEquals('Unprocessable Entity', $response->getReasonPhrase());
+    }
+
+    public function ianaCodesReasonPhrasesProvider()
+    {
+        $ianaHttpStatusCodes = new DOMDocument();
+
+        libxml_set_streams_context(
+            stream_context_create(
+                array(
+                    'http' => array(
+                        'method'  => 'GET',
+                        'timeout' => 30,
+                    ),
+                )
+            )
+        );
+
+        $ianaHttpStatusCodes->load('https://www.iana.org/assignments/http-status-codes/http-status-codes.xml');
+
+        if (! $ianaHttpStatusCodes->relaxNGValidate(__DIR__ . '/TestAsset/http-status-codes.rng')) {
+            self::fail('Unable to retrieve IANA response status codes due to timeout or invalid XML');
+        }
+
+        $ianaCodesReasonPhrases = array();
+
+        $xpath = new DOMXPath($ianaHttpStatusCodes);
+        $xpath->registerNamespace('ns', 'http://www.iana.org/assignments');
+
+        $records = $xpath->query('//ns:record');
+
+        foreach ($records as $record) {
+            $value = $xpath->query('.//ns:value', $record)->item(0)->nodeValue;
+            $description = $xpath->query('.//ns:description', $record)->item(0)->nodeValue;
+
+            if (in_array($description, array('Unassigned', '(Unused)'))) {
+                continue;
+            }
+
+            if (preg_match('/^([0-9]+)\s*\-\s*([0-9]+)$/', $value, $matches)) {
+                for ($value = $matches[1]; $value <= $matches[2]; $value++) {
+                    $ianaCodesReasonPhrases[] = array($value, $description);
+                }
+            } else {
+                $ianaCodesReasonPhrases[] = array($value, $description);
+            }
+        }
+
+        return $ianaCodesReasonPhrases;
+    }
+
+    /**
+     * @dataProvider ianaCodesReasonPhrasesProvider
+     */
+    public function testReasonPhraseDefaultsAgainstIana($code, $reasonPhrase)
+    {
+        $response = $this->response->withStatus($code);
+        $this->assertEquals($reasonPhrase, $response->getReasonPhrase());
     }
 
     public function testCanSetCustomReasonPhrase()
@@ -92,27 +129,58 @@ class ResponseTest extends TestCase
         $this->assertEquals($headers, $response->getHeaders());
     }
 
-    public function invalidStatus()
+    /**
+     * @dataProvider validStatusCodes
+     */
+    public function testCreateWithValidStatusCodes($code)
+    {
+        $response = $this->response->withStatus($code);
+
+        $this->assertEquals($code, $response->getStatusCode());
+    }
+
+    public function validStatusCodes()
     {
         return array(
-            'true' => array( true ),
-            'false' => array( false ),
-            'float' => array( 100.1 ),
-            'bad-string' => array( 'Two hundred' ),
-            'array' => array( array( 200 ) ),
-            'object' => array( (object) array( 'statusCode' => 200 ) ),
-            'too-small' => array( 1 ),
-            'too-big' => array( 600 ),
+            'minimum' => array(100),
+            'middle' => array(300),
+            'maximum' => array(599),
         );
     }
 
     /**
-     * @dataProvider invalidStatus
+     * @dataProvider invalidStatusCodes
      */
     public function testConstructorRaisesExceptionForInvalidStatus($code)
     {
         $this->setExpectedException('InvalidArgumentException', 'Invalid status code');
+
         new Response('php://memory', $code);
+    }
+
+    /**
+     * @dataProvider invalidStatusCodes
+     */
+    public function testCannotSetInvalidStatusCode($code)
+    {
+        $this->setExpectedException('InvalidArgumentException');
+
+        $this->response->withStatus($code);
+    }
+
+    public function invalidStatusCodes()
+    {
+        return array(
+            'true' => array( true ),
+            'false' => array( false ),
+            'array' => array( array( 200 ) ),
+            'object' => array( (object) array( 'statusCode' => 200 ) ),
+            'too-low' => array(99),
+            'float' => array(400.5),
+            'too-high' => array(600),
+            'null' => array(null),
+            'string' => array('foo'),
+        );
     }
 
     public function invalidResponseBody()
@@ -167,7 +235,7 @@ class ResponseTest extends TestCase
 
     public function testReasonPhraseCanBeEmpty()
     {
-        $response = $this->response->withStatus(599);
+        $response = $this->response->withStatus(555);
         $this->assertInternalType('string', $response->getReasonPhrase());
         $this->assertEmpty($response->getReasonPhrase());
     }
@@ -197,6 +265,6 @@ class ResponseTest extends TestCase
     public function testConstructorRaisesExceptionForHeadersWithCRLFVectors($name, $value)
     {
         $this->setExpectedException('InvalidArgumentException');
-        $request = new Response('php://memory', 200, array($name =>  $value));
+        $request = new Response('php://memory', 200, array($name => $value));
     }
 }
